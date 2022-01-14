@@ -1,0 +1,23 @@
+{
+	"development": {
+		"username": "postgres",
+		"password": "r1singsuN",
+		"database": "ATTENDANCE-DB",
+		"host": "localhost",
+		"dialect": "postgres"
+	},
+	"test": {
+		"username": "postgres",
+		"password": "r1singsuN",
+		"database": "database_test",
+		"host": "127.0.0.1",
+		"dialect": "postgres"
+	},
+	"production": {
+		"username": "postgres",
+		"password": "r1singsuN",
+		"database": "database_production",
+		"host": "127.0.0.1",
+		"dialect": "post"
+	}
+}

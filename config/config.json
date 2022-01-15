@@ -14,10 +14,15 @@
 		"dialect": "postgres"
 	},
 	"production": {
-		"username": "postgres",
-		"password": "r1singsuN",
-		"database": "database_production",
-		"host": "127.0.0.1",
-		"dialect": "post"
+		"use_env_variable": "DATABASE_URL",
+		"ssl": true,
+		"dialect": "postgres",
+		"protocol": "postgres",
+		"dialectOptions": {
+			"ssl": {
+				"require": true,
+				"rejectUnauthorized": false
+			}
+		}
 	}
 }

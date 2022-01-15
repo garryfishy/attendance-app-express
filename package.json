@@ -23,6 +23,7 @@
 		"FormData": "^0.10.1",
 		"axios": "^0.24.0",
 		"bcrypt": "^5.0.1",
+		"bcryptjs": "^2.4.3",
 		"cors": "^2.8.5",
 		"express": "^4.17.2",
 		"form-data": "^4.0.0",

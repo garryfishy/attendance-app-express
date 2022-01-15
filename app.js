@@ -31,3 +31,5 @@ app.post("/changeStatus/:id", absensiController.updateStatus);
 app.listen(port, () => {
 	console.log(`App listening at http://localhost:${port}`);
 });
+
+module.exports = app;

@@ -1,12 +1,17 @@
 const { user, history } = require("../models/");
 const { hashPassword, checkHash } = require("../helpers/bcrypt");
 const moment = require("moment");
+const image = require("../helpers/imagekit");
 class userController {
 	static async register(req, res, next) {
 		try {
-			let { email, username, password, photo, birthday, gender, role } =
+			let { email, username, password, birthday, gender, role } =
 				req.body;
-			console.log(email);
+
+			const imageName = req.file.originalname;
+			const buffer = req.file.buffer.toString("base64");
+			let photo = await image(imageName, buffer);
+			photo = photo.url;
 
 			let result = await user.create({
 				email,
@@ -24,7 +29,7 @@ class userController {
 						new Date()
 					).format("DD/MM/YYYY")}`,
 				});
-				res.status(200).json({ username, email });
+				res.status(200).json({ username, email, photo });
 			} else {
 				throw new Error();
 			}
@@ -46,6 +51,7 @@ class userController {
 						msg: "Login Succesfull",
 						username: result.username,
 						email: result.email,
+						photo: result.photo,
 					});
 				} else {
 					throw new Error();
@@ -66,6 +72,46 @@ class userController {
 
 			if (result) {
 				res.status(200).json(result);
+			}
+		} catch (error) {
+			res.json(error.message);
+		}
+	}
+
+	static async update(req, res, next) {
+		try {
+			let { email, username, password, birthday, gender, role } =
+				req.body;
+
+			let { id } = req.params;
+
+			const imageName = req.file.originalname;
+			const buffer = req.file.buffer.toString("base64");
+			let photo = await image(imageName, buffer);
+			photo = photo.url;
+
+			let result = await user.update(
+				{
+					email,
+					username,
+					password: await hashPassword(password),
+					photo,
+					birthday,
+					gender,
+					role,
+				},
+				{ where: { id } }
+			);
+
+			if (result) {
+				await history.create({
+					activity: `${email} edited account on ${moment(
+						new Date()
+					).format("DD/MM/YYYY")}`,
+				});
+				res.status(200).json({ username, email, photo });
+			} else {
+				throw new Error();
 			}
 		} catch (error) {
 			res.json(error.message);

@@ -23,6 +23,8 @@ class userController {
 				role,
 			});
 
+			// asd
+
 			if (result) {
 				await history.create({
 					activity: `${email} created an account on ${moment(

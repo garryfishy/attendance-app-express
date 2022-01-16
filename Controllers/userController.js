@@ -21,21 +21,16 @@ class userController {
 
 	static async register(req, res, next) {
 		try {
-			let { email, username, password, birthday, gender, role } =
-				req.body;
+			let { email, username, password, role } = req.body;
 
-			const imageName = req.file.originalname;
-			const buffer = req.file.buffer.toString("base64");
-			let photo = await image(imageName, buffer);
-			photo = photo.url;
+			if (!role || role.length === 0) {
+				role = "Lawyer";
+			}
 
 			let result = await user.create({
 				email,
 				username,
 				password: await hashPassword(password),
-				photo,
-				birthday,
-				gender,
 				role,
 			});
 
@@ -45,7 +40,7 @@ class userController {
 						new Date()
 					).format("DD/MM/YYYY")}`,
 				});
-				res.status(200).json({ username, email, photo });
+				res.status(200).json({ username, email, role });
 			} else {
 				throw new Error();
 			}

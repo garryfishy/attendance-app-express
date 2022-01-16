@@ -17,7 +17,7 @@ app.get("/", (req, res) => {
 });
 
 // USER
-app.post("/register", upload.single("image"), UserController.register);
+app.post("/register", UserController.register);
 app.post("/login", UserController.login);
 app.get("/user/:id", UserController.getUser);
 app.post("/edit-user/:id", upload.single("image"), UserController.update);

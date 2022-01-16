@@ -29,6 +29,7 @@ app.get("/all-logs", absensiController.getAllLogs);
 app.get("/logs/:id", absensiController.getLogsById);
 app.post("/changeStatus/:id", absensiController.updateStatus);
 app.get("/statuspending", absensiController.getAllPending);
+app.get("/userLogsHistory/:user_id", absensiController.getUserLogs);
 
 // CLIENT API
 app.get("/clients", UserController.getClient);

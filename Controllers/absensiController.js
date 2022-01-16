@@ -137,6 +137,58 @@ class absensiController {
 			res.status(500).json({ err: error.message });
 		}
 	}
+
+	static async getUserLogs(req, res, next) {
+		try {
+			let { user_id } = req.params;
+			let result = await log.findAll({ where: { user_id } });
+			let newRes = result.map((e) => {
+				if (e.status === "Accept") {
+					e.status = "Sukses";
+				} else if (e.status === " Reject") {
+					e.status = "Gagal";
+				}
+				return {
+					id: e.id,
+					name: e.name,
+					status: e.status,
+					photo: e.photo,
+					long: e.long,
+					lat: e.lat,
+					date:
+						e.date.getFullYear() +
+						"-" +
+						(e.date.getMonth() + 1) +
+						"-" +
+						e.date.getDate(),
+					time:
+						e.date.getHours() +
+						":" +
+						e.date.getMinutes() +
+						":" +
+						e.date.getSeconds(),
+				};
+			});
+			res.status(200).json(newRes);
+		} catch (error) {
+			res.status(500).json({ err: error.message });
+		}
+	}
+
+	// {
+	// 	"id": 21,
+	// 	"name": "admin",
+	// 	"status": "Pending",
+	// 	"activity": "Clock In",
+	// 	"photo": "https://ik.imagekit.io/waknkqe0dx5v/scaled_c3b9561f-dcfa-4f3a-9ffd-361df2c833145778159893473007654_1iPAi8Usb.jpg",
+	// 	"long": null,
+	// 	"lat": null,
+	// 	"notes": "bhasak",
+	// 	"user_id": 8,
+	// 	"date": "2022-01-16T12:30:06.644Z",
+	// 	"createdAt": "2022-01-16T12:30:07.909Z",
+	// 	"updatedAt": "2022-01-16T12:30:07.909Z"
+	// },
 }
 
 module.exports = absensiController;

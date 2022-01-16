@@ -25,17 +25,20 @@ class absensiController {
 			let photo = await image(imageName, buffer);
 			photo = photo.url;
 
-			console.log(name, photo, activity, status, date);
+			console.log(long, lat);
 
 			let result = await log.create({
 				name,
 				status,
+				long,
+				lat,
 				activity,
 				date,
 				photo,
 				user_id,
 				notes,
 			});
+
 			if (result) {
 				res.status(200).json({
 					name,

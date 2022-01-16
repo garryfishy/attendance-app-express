@@ -1,19 +1,11 @@
-const { kegiatan, client, cases, user } = require("../models/");
+const { kegiatan, clients, cases, user } = require("../models/");
 const image = require("../helpers/imagekit");
 
 class activityController {
 	static async createActivity(req, res, next) {
 		try {
-			let {
-				kasus,
-				subject,
-				client,
-				notes,
-				kegiatan_type_id,
-				lawyer_id,
-				client_id,
-				case_id,
-			} = req.body;
+			let { kasus, lawyer_id, subject, client, notes, kegiatan_type_id } =
+				req.body;
 
 			const imageName = req.file.originalname;
 			const buffer = req.file.buffer.toString("base64");
@@ -27,9 +19,7 @@ class activityController {
 				client,
 				notes,
 				kegiatan_type_id,
-				case_id,
 				lawyer_id,
-				client_id,
 			});
 
 			if (result) {
@@ -68,6 +58,8 @@ class activityController {
 					e.dataValues.kegiatan_type_id = 1
 						? "Start Kunjungan"
 						: "Finish Kunjungan";
+					delete e.dataValues.client_id;
+					delete e.dataValues.case_id;
 					emptyObj.push(e.dataValues);
 				});
 				res.status(200).json(emptyObj);

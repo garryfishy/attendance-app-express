@@ -40,7 +40,7 @@ class userController {
 						new Date()
 					).format("DD/MM/YYYY")}`,
 				});
-				res.status(200).json({ username, email, role });
+				res.status(200).json({ id: result.id, username, email, role });
 			} else {
 				throw new Error();
 			}
@@ -60,6 +60,7 @@ class userController {
 				if (check) {
 					res.status(200).json({
 						msg: "Login Succesfull",
+						id: result.id,
 						username: result.username,
 						email: result.email,
 						photo: result.photo,

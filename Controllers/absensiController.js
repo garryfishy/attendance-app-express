@@ -16,7 +16,7 @@ class absensiController {
 
 	static async attendance(req, res, next) {
 		try {
-			let { name, activity, long, lat, user_id } = req.body;
+			let { name, activity, long, lat, user_id, notes } = req.body;
 			let status = "Pending";
 			let date = new Date();
 
@@ -34,6 +34,7 @@ class absensiController {
 				date,
 				photo,
 				user_id,
+				notes,
 			});
 			if (result) {
 				res.status(200).json({
@@ -43,6 +44,7 @@ class absensiController {
 					photo,
 					long,
 					lat,
+					notes,
 					user_id,
 					date:
 						date.getFullYear() +

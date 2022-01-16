@@ -24,13 +24,16 @@ module.exports = {
 				type: Sequelize.INTEGER,
 			},
 			date: {
-				type: Sequelize.STRING,
+				type: Sequelize.DATE,
 			},
 			long: {
 				type: Sequelize.STRING,
 			},
+			notes: {
+				type: Sequelize.STRING,
+			},
 			lat: {
-				type: Sequelize.DATE,
+				type: Sequelize.STRING,
 			},
 			createdAt: {
 				allowNull: false,

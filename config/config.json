@@ -3,7 +3,7 @@
 		"username": "postgres",
 		"password": "r1singsuN",
 		"database": "ATTENDANCE-DB",
-		"host": "localhost",
+		"host": "0.0.0.0",
 		"dialect": "postgres"
 	},
 	"test": {

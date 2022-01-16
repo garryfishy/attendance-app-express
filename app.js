@@ -5,12 +5,13 @@ const multer = require("multer");
 const cors = require("cors");
 const UserController = require("./Controllers/userController");
 const absensiController = require("./Controllers/absensiController");
+const activityController = require("./Controllers/activityController");
 const upload = require("./helpers/multer");
+const morgan = require("morgan");
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cors());
-
 app.get("/", (req, res) => {
 	res.send("Hello World!");
 });
@@ -27,9 +28,25 @@ app.get("/attendance-type", absensiController.getAll);
 app.get("/all-logs", absensiController.getAllLogs);
 app.get("/logs/:id", absensiController.getLogsById);
 app.post("/changeStatus/:id", absensiController.updateStatus);
+app.get("/statuspending", absensiController.getAllPending);
+
+// CLIENT API
+app.get("/clients", UserController.getClient);
+
+// CASES API
+app.get("/cases", UserController.getCase);
+
+app.post(
+	"/activities",
+	upload.single("image"),
+	activityController.createActivity
+);
+
+app.get("/kegiatan_type", activityController.getAllKegiatanType);
+module.exports = app;
+
+app.get("/activities", activityController.getAll);
 
 app.listen(port, () => {
 	console.log(`App listening at http://localhost:${port}`);
 });
-
-module.exports = app;

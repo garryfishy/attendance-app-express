@@ -1,0 +1,80 @@
+const { kegiatan, client, cases, user } = require("../models/");
+const image = require("../helpers/imagekit");
+
+class activityController {
+	static async createActivity(req, res, next) {
+		try {
+			let {
+				kasus,
+				subject,
+				client,
+				notes,
+				kegiatan_type_id,
+				lawyer_id,
+				client_id,
+				case_id,
+			} = req.body;
+
+			const imageName = req.file.originalname;
+			const buffer = req.file.buffer.toString("base64");
+			let photo = await image(imageName, buffer);
+			photo = photo.url;
+
+			let result = await kegiatan.create({
+				case: kasus,
+				photo,
+				subject,
+				client,
+				notes,
+				kegiatan_type_id,
+				case_id,
+				lawyer_id,
+				client_id,
+			});
+
+			if (result) {
+				res.status(200).json(result);
+			}
+		} catch (error) {
+			res.status(500).json({ error: error.message });
+		}
+	}
+
+	static async getAllKegiatanType(req, res, next) {
+		let kegiatanType = [
+			{
+				id: 1,
+				name: "Start Kunjungan",
+			},
+			{
+				id: 2,
+				name: "Finish Kunjungan",
+			},
+		];
+		res.status(200).json(kegiatanType);
+	}
+
+	static async getAll(req, res, next) {
+		try {
+			let result = await kegiatan.findAll();
+
+			if (result) {
+				// let findClient = await client.findByPk(result.dataValues.client_id);
+				// let findCase = await cases.findByPk(result.dataValues.case_id);
+				// let findUser = await user.findByPk(result.dataValues.lawyer_id);
+
+				let emptyObj = [];
+				result.map((e) => {
+					e.dataValues.kegiatan_type_id = 1
+						? "Start Kunjungan"
+						: "Finish Kunjungan";
+					emptyObj.push(e.dataValues);
+				});
+				res.status(200).json(emptyObj);
+			}
+		} catch (error) {
+			res.status(500).json(error.message);
+		}
+	}
+}
+module.exports = activityController;

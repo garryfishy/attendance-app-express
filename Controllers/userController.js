@@ -1,8 +1,24 @@
-const { user, history } = require("../models/");
+const { user, history, client, cases } = require("../models/");
 const { hashPassword, checkHash } = require("../helpers/bcrypt");
 const moment = require("moment");
 const image = require("../helpers/imagekit");
 class userController {
+	static async getClient(req, res, next) {
+		try {
+			let result = await client.findAll();
+
+			res.status(200).json(result);
+		} catch (error) {}
+	}
+
+	static async getCase(req, res, next) {
+		try {
+			let result = await cases.findAll();
+
+			res.status(200).json(result);
+		} catch (error) {}
+	}
+
 	static async register(req, res, next) {
 		try {
 			let { email, username, password, birthday, gender, role } =
@@ -22,8 +38,6 @@ class userController {
 				gender,
 				role,
 			});
-
-			// asd
 
 			if (result) {
 				await history.create({
@@ -55,8 +69,6 @@ class userController {
 						email: result.email,
 						photo: result.photo,
 					});
-				} else {
-					throw new Error();
 				}
 			}
 		} catch (error) {

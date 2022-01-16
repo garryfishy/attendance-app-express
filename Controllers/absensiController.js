@@ -16,7 +16,7 @@ class absensiController {
 
 	static async attendance(req, res, next) {
 		try {
-			let { name, activity, long, lat } = req.body;
+			let { name, activity, long, lat, user_id } = req.body;
 			let status = "Pending";
 			let date = new Date();
 
@@ -33,6 +33,7 @@ class absensiController {
 				activity,
 				date,
 				photo,
+				user_id,
 			});
 			if (result) {
 				res.status(200).json({
@@ -42,7 +43,13 @@ class absensiController {
 					photo,
 					long,
 					lat,
-					date: date.getDate(),
+					user_id,
+					date:
+						date.getFullYear() +
+						"-" +
+						(date.getMonth() + 1) +
+						"-" +
+						date.getDate(),
 					time:
 						date.getHours() +
 						":" +
@@ -91,6 +98,39 @@ class absensiController {
 			let { id } = req.params;
 			let result = await log.findByPk(id);
 			res.status(200).json(result);
+		} catch (error) {
+			res.status(500).json({ err: error.message });
+		}
+	}
+
+	static async getAllPending(req, res, next) {
+		try {
+			let result = await log.findAll({ where: { status: "Pending" } });
+			let newRes = result.map((e) => {
+				return {
+					id: e.id,
+					name: e.name,
+					status: e.status,
+					activity: e.activity,
+					photo: e.photo,
+					date:
+						e.date.getFullYear() +
+						"-" +
+						(e.date.getMonth() + 1) +
+						"-" +
+						e.date.getDate(),
+					time:
+						e.date.getHours() +
+						":" +
+						e.date.getMinutes() +
+						":" +
+						e.date.getSeconds(),
+					long: e.long,
+					lat: e.lat,
+					user_id: e.user_id,
+				};
+			});
+			res.status(200).json(newRes);
 		} catch (error) {
 			res.status(500).json({ err: error.message });
 		}

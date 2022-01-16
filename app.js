@@ -35,7 +35,7 @@ app.get("/clients", UserController.getClient);
 
 // CASES API
 app.get("/cases", UserController.getCase);
-
+app.get("/cases/:client_id", UserController.getCaseById);
 app.post(
 	"/activities",
 	upload.single("image"),

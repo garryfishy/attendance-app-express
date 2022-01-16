@@ -68,6 +68,7 @@ class userController {
 						username: result.username,
 						email: result.email,
 						photo: result.photo,
+						role: result.role,
 					});
 				}
 			}
@@ -126,6 +127,20 @@ class userController {
 				res.status(200).json({ username, email, photo });
 			} else {
 				throw new Error();
+			}
+		} catch (error) {
+			res.json(error.message);
+		}
+	}
+
+	static async getCaseById(req, res, next) {
+		try {
+			let { client_id } = req.params;
+
+			let result = await cases.findOne({ where: { client_id } });
+
+			if (result) {
+				res.status(200).json(result);
 			}
 		} catch (error) {
 			res.json(error.message);

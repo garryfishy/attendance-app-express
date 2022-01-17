@@ -158,6 +158,7 @@ class absensiController {
 					photo: e.photo,
 					long: e.long,
 					lat: e.lat,
+					activity: e.activity,
 					date:
 						e.date.getFullYear() +
 						"-" +

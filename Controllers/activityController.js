@@ -4,8 +4,18 @@ const image = require("../helpers/imagekit");
 class activityController {
 	static async createActivity(req, res, next) {
 		try {
-			let { kasus, lawyer_id, subject, client, notes, kegiatan_type_id } =
-				req.body;
+			let {
+				kasus,
+				lawyer_id,
+				long,
+				lat,
+				subject,
+				client,
+				notes,
+				kegiatan_type_id,
+			} = req.body;
+
+			console.log(req.body);
 
 			const imageName = req.file.originalname;
 			const buffer = req.file.buffer.toString("base64");
@@ -15,6 +25,8 @@ class activityController {
 			let result = await kegiatan.create({
 				case: kasus,
 				photo,
+				long,
+				lat,
 				subject,
 				client,
 				notes,

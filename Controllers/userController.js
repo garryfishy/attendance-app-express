@@ -133,7 +133,7 @@ class userController {
 		try {
 			let { client_id } = req.params;
 
-			let result = await cases.findOne({ where: { client_id } });
+			let result = await cases.findAll({ where: { client_id } });
 
 			if (result) {
 				res.status(200).json(result);

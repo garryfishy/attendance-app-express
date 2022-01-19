@@ -21,7 +21,7 @@ app.post("/register", UserController.register);
 app.post("/login", UserController.login);
 app.get("/user/:id", UserController.getUser);
 app.post("/edit-user/:id", upload.single("image"), UserController.update);
-
+app.get("/users", UserController.getUsers);
 // ABSENSI
 app.post("/attend", upload.single("image"), absensiController.attendance);
 app.get("/attendance-type", absensiController.getAll);
@@ -47,7 +47,9 @@ app.get("/kegiatan_type", activityController.getAllKegiatanType);
 module.exports = app;
 
 app.get("/activities", activityController.getAll);
-
+app.get("/activities/:id", activityController.activityById);
+app.get("/pendingActivity", activityController.getAllPending);
+app.post("/activityStatus/:id", activityController.updateStatus);
 app.listen(port, () => {
 	console.log(`App listening at http://localhost:${port}`);
 });

@@ -91,8 +91,15 @@ class userController {
 
 	static async update(req, res, next) {
 		try {
-			let { email, username, password, birthday, gender, role } =
-				req.body;
+			let {
+				email,
+				username,
+				password,
+				birthday,
+				gender,
+				role,
+				phone_number,
+			} = req.body;
 
 			let { id } = req.params;
 
@@ -109,17 +116,18 @@ class userController {
 					photo,
 					birthday,
 					gender,
+					phone_number,
 					role,
 				},
 				{ where: { id } }
 			);
 
 			if (result) {
-				await history.create({
-					activity: `${email} edited account on ${moment(
-						new Date()
-					).format("DD/MM/YYYY")}`,
-				});
+				// await history.create({
+				// 	activity: `${email} edited account on ${moment(
+				// 		new Date()
+				// 	).format("DD/MM/YYYY")}`,
+				// });
 				res.status(200).json({ username, email, photo });
 			} else {
 				throw new Error();
@@ -135,6 +143,17 @@ class userController {
 
 			let result = await cases.findAll({ where: { client_id } });
 
+			if (result) {
+				res.status(200).json(result);
+			}
+		} catch (error) {
+			res.json(error.message);
+		}
+	}
+
+	static async getUsers(req, res, next) {
+		try {
+			let result = user.findAll();
 			if (result) {
 				res.status(200).json(result);
 			}

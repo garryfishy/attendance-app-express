@@ -1,4 +1,4 @@
-const { kegiatan, clients, cases, user, log } = require("../models/");
+const { kegiatan, client, cases, user, log } = require("../models/");
 const image = require("../helpers/imagekit");
 
 class activityController {
@@ -86,25 +86,42 @@ class activityController {
 	static async activityById(req, res, next) {
 		try {
 			let { id } = req.params;
-			let result = await kegiatan.findAll({ where: { lawyer_id: id } });
-
-			console.log(id);
+			let result = await kegiatan.findAll({
+				where: { lawyer_id: id },
+			});
 
 			if (result) {
-				// let findClient = await client.findByPk(result.dataValues.client_id);
-				// let findCase = await cases.findByPk(result.dataValues.case_id);
-				// let findUser = await user.findByPk(result.dataValues.lawyer_id);
+				let findUser = await user.findByPk(id);
+				let emptyObj = [];
 
-				// let emptyObj = [];
-				// result.map((e) => {
-				// 	e.dataValues.kegiatan_type_id = 1
-				// 		? "Start Kunjungan"
-				// 		: "Finish Kunjungan";
-				// 	delete e.dataValues.client_id;
-				// 	delete e.dataValues.case_id;
-				// 	emptyObj.push(e.dataValues);
-				// });
-				res.status(200).json(result);
+				result.map((e) => {
+					emptyObj.push({
+						name: findUser.dataValues.username,
+						client: e.dataValues.client,
+						case: e.dataValues.case,
+						status: e.dataValues.status,
+						photo: e.dataValues.photo,
+						long: e.dataValues.long,
+						lat: e.dataValues.lat,
+						notes: e.dataValues.notes,
+						activity: (e.dataValues.kegiatan_type_id = 1
+							? "Start Kunjungan"
+							: "Finish Kunjungan"),
+						date:
+							e.dataValues.createdAt.getFullYear() +
+							"-" +
+							(e.dataValues.createdAt.getMonth() + 1) +
+							"-" +
+							e.dataValues.createdAt.getDate(),
+						time:
+							e.dataValues.createdAt.getHours() +
+							":" +
+							e.dataValues.createdAt.getMinutes() +
+							":" +
+							e.dataValues.createdAt.getSeconds(),
+					});
+				});
+				res.status(200).json(emptyObj);
 			}
 		} catch (error) {
 			res.status(500).json(error.message);
@@ -134,8 +151,47 @@ class activityController {
 			let result = await kegiatan.findAll({
 				where: { status: "Pending" },
 			});
+			console.log("result");
 			if (result) {
-				res.status(200).json(result);
+				let emptyObj = [];
+				let mapping = result.map(async (e) => {
+					let name = "";
+					await user
+						.findByPk(e.dataValues.lawyer_id)
+						.then((user) => {
+							name = user.dataValues.username;
+							e.dataValues.name = name;
+						})
+						.catch((err) => {
+							console.error(err);
+						});
+					e.dataValues.name = name;
+					(e.dataValues.activity = e.dataValues.kegiatan_type_id =
+						1 ? "Start Kunjungan" : "Finish Kunjungan"),
+						(e.dataValues.date =
+							e.dataValues.createdAt.getFullYear() +
+							"-" +
+							(e.dataValues.createdAt.getMonth() + 1) +
+							"-" +
+							e.dataValues.createdAt.getDate()),
+						(e.dataValues.time =
+							e.dataValues.createdAt.getHours() +
+							":" +
+							e.dataValues.createdAt.getMinutes() +
+							":" +
+							e.dataValues.createdAt.getSeconds()),
+						delete e.dataValues.updatedAt;
+					delete e.dataValues.createdAt;
+					delete e.dataValues.client_id;
+					delete e.dataValues.lawyer_id;
+					delete e.dataValues.case_id;
+					delete e.dataValues.kegiatan_type_id;
+					return result;
+				});
+
+				Promise.all(mapping).then((results) => {
+					res.status(200).json(results[0]);
+				});
 			}
 		} catch (error) {
 			res.status(500).json({ err: error.message });

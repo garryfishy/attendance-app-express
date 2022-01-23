@@ -153,7 +153,7 @@ class userController {
 
 	static async getUsers(req, res, next) {
 		try {
-			let result = user.findAll();
+			let result = await user.findAll();
 			if (result) {
 				res.status(200).json(result);
 			}

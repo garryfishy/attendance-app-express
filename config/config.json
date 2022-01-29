@@ -1,14 +1,14 @@
 {
 	"development": {
 		"username": "postgres",
-		"password": "r1singsuN",
+		"password": "root",
 		"database": "ATTENDANCE-DB",
 		"host": "0.0.0.0",
 		"dialect": "postgres"
 	},
 	"test": {
 		"username": "postgres",
-		"password": "r1singsuN",
+		"password": "root",
 		"database": "database_test",
 		"host": "127.0.0.1",
 		"dialect": "postgres"
